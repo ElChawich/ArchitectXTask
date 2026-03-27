@@ -121,7 +121,7 @@ Two stores:
 
 **react-i18next** is used (i18next recommended in the spec). Justified: it provides React hooks (`useTranslation`), lazy namespace loading, and is the most widely adopted i18n solution in the React ecosystem.
 
-**RTL without `I18nManager.forceRTL`**: System-level RTL via `I18nManager` requires an app restart and prevents animated transitions. Instead, `isRTL = language === 'ar'` drives conditional `flexDirection`, `textAlign`, and `writingDirection` props throughout the app. This enables the live `LinearTransition.springify()` layout animation when switching languages. Language is persisted via MMKV and re-applied to `i18n` on app launch.
+**RTL without `I18nManager.forceRTL`**: System-level RTL via `I18nManager` requires an app restart and prevents animated transitions. Instead, `isRTL = language === Language.AR` drives conditional `flexDirection`, `textAlign`, and `direction` props throughout the app. This enables the live `LinearTransition.springify()` layout animation when switching languages. Language is persisted via MMKV and re-applied to `i18n` on app launch.
 
 Prices, ratings, and stock counts are wrapped in explicit `flexDirection: 'row'` containers to remain LTR even within RTL layouts.
 
