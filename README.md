@@ -157,14 +157,12 @@ No `Animated` API from React Native core is used anywhere.
 
 1. **RTL back arrow**: The native NativeStack back chevron doesn't auto-flip without `I18nManager`. Mitigated by showing `headerBackTitle` in Arabic mode. A custom `headerLeft` with a flipped SVG arrow was deferred for time.
 2. **Search + category simultaneously**: DummyJSON doesn't support combined filters. Search takes priority when both are active; the UI clears search when a category is tapped.
-3. **No `react-native-fast-image`**: Default RN `Image` has no disk cache. Adding `react-native-fast-image` would significantly improve perceived performance on slow connections.
 
 ---
 
 ## What I Would Improve Given More Time
 
-1. Add `react-native-fast-image` for priority-controlled, disk-cached image loading.
-2. Custom RTL-aware `headerLeft` with a Reanimated-mirrored back chevron.
+1. Custom RTL-aware `headerLeft` with a Reanimated-mirrored back chevron.
 3. E2E tests with Detox covering the product → detail → favourite → favourites tab flow.
 4. Shared element transition from product card thumbnail to detail image gallery.
 5. Virtualised/windowed list for infinite scroll to cap memory usage.
