@@ -1,41 +1,34 @@
 import React from 'react';
 const { View, Text, Image, ScrollView, FlatList } = require('react-native');
 
-const mock = {
-  default: {
-    View,
-    Text,
-    Image,
-    ScrollView,
-    FlatList,
-    createAnimatedComponent: (component: React.ComponentType) => component,
-  },
-  useSharedValue: (init: unknown) => ({ value: init }),
-  useAnimatedStyle: (fn: () => object) => fn(),
-  useAnimatedScrollHandler: () => () => {},
-  withTiming: (toValue: unknown) => toValue,
-  withSpring: (toValue: unknown) => toValue,
-  withSequence: (..._args: unknown[]) => 0,
-  withRepeat: (animation: unknown) => animation,
-  withDelay: (_delay: unknown, animation: unknown) => animation,
-  Easing: { linear: (t: unknown) => t, ease: (t: unknown) => t, inOut: (fn: unknown) => fn },
-  cancelAnimation: jest.fn(),
-  runOnJS: (fn: (...args: unknown[]) => unknown) => fn,
-  runOnUI: (fn: (...args: unknown[]) => unknown) => fn,
-  LinearTransition: {
-    springify: () => ({ damping: () => ({}) }),
-  },
-  createAnimatedComponent: (component: React.ComponentType) => component,
+export const useSharedValue = (init: unknown) => ({ value: init });
+export const useAnimatedStyle = (fn: () => object) => fn();
+export const useAnimatedScrollHandler = () => () => {};
+export const withTiming = (toValue: unknown) => toValue;
+export const withSpring = (toValue: unknown) => toValue;
+export const withSequence = (..._args: unknown[]) => 0;
+export const withRepeat = (animation: unknown) => animation;
+export const withDelay = (_delay: unknown, animation: unknown) => animation;
+export const cancelAnimation = jest.fn();
+export const runOnJS = (fn: (...args: unknown[]) => unknown) => fn;
+export const runOnUI = (fn: (...args: unknown[]) => unknown) => fn;
+export const Easing = {
+  linear: (t: unknown) => t,
+  ease: (t: unknown) => t,
+  inOut: (fn: unknown) => fn,
 };
+export const LinearTransition = {
+  springify: () => ({ damping: () => ({}) }),
+};
+export const createAnimatedComponent = (component: React.ComponentType) => component;
 
-mock.default = {
-  ...mock.default,
-  ...mock,
+const Animated = {
   View,
   Text,
   Image,
   ScrollView,
   FlatList,
+  createAnimatedComponent,
 };
 
-module.exports = mock;
+export default Animated;

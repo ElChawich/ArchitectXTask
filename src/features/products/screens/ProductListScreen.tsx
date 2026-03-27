@@ -5,7 +5,6 @@ import {
   TextInput,
   Text,
   Pressable,
-  ScrollView,
   ActivityIndicator,
   StyleSheet,
   ViewStyle,
@@ -120,6 +119,34 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
     chipTextUnselected: { ...styles.categoryChipText, color: colors.text } as TextStyle,
   }), [colors, isRTL]);
 
+  const categoryData = useMemo<Category[]>(
+    () => [{ slug: '', name: t('category.all'), url: '' }, ...(categories ?? [])],
+    [categories, t],
+  );
+
+  const renderCategoryChip = useCallback(
+    ({ item }: { item: Category }) => {
+      const isSelected = selectedCategory === item.slug;
+      return (
+        <Pressable
+          style={isSelected ? dynamicStyles.chipSelected : dynamicStyles.chipUnselected}
+          onPress={() => handleCategorySelect(item.slug)}
+          accessibilityRole="button"
+          accessibilityState={{ selected: isSelected }}
+          accessibilityLabel={item.name}
+        >
+          <Text
+            style={isSelected ? dynamicStyles.chipTextSelected : dynamicStyles.chipTextUnselected}
+            numberOfLines={1}
+          >
+            {item.name}
+          </Text>
+        </Pressable>
+      );
+    },
+    [selectedCategory, dynamicStyles, handleCategorySelect],
+  );
+
   return (
     <Animated.View
       layout={LinearTransition.springify().damping(18)}
@@ -156,43 +183,21 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
           <Text style={dynamicStyles.categoryLabel}>
             {t('category.label')}
           </Text>
-          <ScrollView
+          <FlatList
             horizontal
+            data={categoryData}
+            keyExtractor={(item) => item.slug || '__all__'}
+            renderItem={renderCategoryChip}
             showsHorizontalScrollIndicator={false}
             style={dynamicStyles.categoryScrollView}
             contentContainerStyle={styles.categoryScroll}
-            accessibilityRole="scrollbar"
+            initialNumToRender={8}
+            maxToRenderPerBatch={10}
+            windowSize={3}
+            removeClippedSubviews
+            accessibilityRole="list"
             accessibilityLabel={`${t('category.label')} filter`}
-          >
-            <Pressable
-              style={selectedCategory === '' ? dynamicStyles.chipSelected : dynamicStyles.chipUnselected}
-              onPress={() => handleCategorySelect('')}
-              accessibilityRole="button"
-              accessibilityState={{ selected: selectedCategory === '' }}
-              accessibilityLabel={t('category.all')}
-            >
-              <Text style={selectedCategory === '' ? dynamicStyles.chipTextSelected : dynamicStyles.chipTextUnselected}>
-                {t('category.all')}
-              </Text>
-            </Pressable>
-            {categories.map((cat) => (
-              <Pressable
-                key={cat.slug}
-                style={selectedCategory === cat.slug ? dynamicStyles.chipSelected : dynamicStyles.chipUnselected}
-                onPress={() => handleCategorySelect(cat.slug)}
-                accessibilityRole="button"
-                accessibilityState={{ selected: selectedCategory === cat.slug }}
-                accessibilityLabel={cat.name}
-              >
-                <Text
-                  style={selectedCategory === cat.slug ? dynamicStyles.chipTextSelected : dynamicStyles.chipTextUnselected}
-                  numberOfLines={1}
-                >
-                  {cat.name}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
+          />
         </View>
       )}
 
