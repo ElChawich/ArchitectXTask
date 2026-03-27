@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { Activity, useCallback, useMemo } from 'react';
 import { Text, StyleSheet, Pressable, Switch, View, ViewStyle, TextStyle } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useIsFocused } from '@react-navigation/native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -12,6 +13,7 @@ import ProductListScreen from '../features/products/screens/ProductListScreen';
 import ProductDetailScreen from '../features/products/screens/ProductDetailScreen';
 import FavoritesScreen from '../features/favorites/screens/FavoritesScreen';
 import useDarkMode from '../hooks/useDarkMode';
+import type { FavoritesScreenProps } from './types';
 import useLanguage from '../hooks/useLanguage';
 import { Direction } from '../constants/layout';
 import type { TabParamList, ProductsStackParamList } from './types';
@@ -99,6 +101,24 @@ function ProductsNavigator() {
   );
 }
 
+function ProductsTabScreen() {
+  const isFocused = useIsFocused();
+  return (
+    <Activity mode={isFocused ? 'visible' : 'hidden'}>
+      <ProductsNavigator />
+    </Activity>
+  );
+}
+
+function FavoritesTabScreen(_props: FavoritesScreenProps) {
+  const isFocused = useIsFocused();
+  return (
+    <Activity mode={isFocused ? 'visible' : 'hidden'}>
+      <FavoritesScreen />
+    </Activity>
+  );
+}
+
 export default function TabNavigator() {
   const { t } = useTranslation();
   const { colors, isDarkMode, toggleDarkMode } = useDarkMode();
@@ -162,7 +182,7 @@ export default function TabNavigator() {
     >
       <Tab.Screen
         name="ProductsTab"
-        component={ProductsNavigator}
+        component={ProductsTabScreen}
         options={{
           title: t('screens.products'),
           tabBarIcon: renderProductsIcon,
@@ -171,7 +191,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name="FavoritesTab"
-        component={FavoritesScreen}
+        component={FavoritesTabScreen}
         options={{
           title: t('screens.favorites'),
           tabBarIcon: renderFavoritesIcon,

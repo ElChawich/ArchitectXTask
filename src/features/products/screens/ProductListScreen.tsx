@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { Activity, useState, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import {
   View,
   FlatList,
@@ -177,8 +177,8 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
         </Pressable>
       </View>
 
-      {/* Category Filter */}
-      {categories && categories.length > 0 && (
+      {/* Category Filter — pre-rendered in background; flips visible once categories load */}
+      <Activity mode={categories && categories.length > 0 ? 'visible' : 'hidden'}>
         <View style={styles.categorySection}>
           <Text style={dynamicStyles.categoryLabel}>
             {t('category.label')}
@@ -199,7 +199,7 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
             accessibilityLabel={`${t('category.label')} filter`}
           />
         </View>
-      )}
+      </Activity>
 
       {/* Content */}
       {isLoading ? (
