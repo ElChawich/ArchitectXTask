@@ -13,6 +13,7 @@ import HeartButton from '../../../components/HeartButton';
 import SkeletonCard from '../../../components/SkeletonCard';
 import ErrorState from '../../../components/ErrorState';
 import useFavorites from '../../../hooks/useFavorites';
+import { useFavoritesStore } from '../../../store/favoritesStore';
 import useDarkMode from '../../../hooks/useDarkMode';
 import useLanguage from '../../../hooks/useLanguage';
 import { spacing, borderRadius, fontSize } from '../../../theme/spacing';
@@ -21,7 +22,8 @@ import type { ProductDetailScreenProps } from '../../../navigation/types';
 export default function ProductDetailScreen({ route, navigation }: ProductDetailScreenProps) {
   const { id, title } = route.params;
   const { product, isLoading, isError, refetch } = useProductDetail(id);
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { toggleFavorite } = useFavorites();
+  const isFav = useFavoritesStore((state) => state.isFavorite(id));
   const { colors } = useDarkMode();
   const { t, isRTL } = useLanguage();
 
@@ -52,13 +54,13 @@ export default function ProductDetailScreen({ route, navigation }: ProductDetail
         product ? (
           <HeartButton
             product={product}
-            isFav={isFavorite(product.id)}
+            isFav={isFav}
             onToggle={toggleFavorite}
-            size={24}
+            size={22}
           />
         ) : null,
     });
-  }, [navigation, title, product, isFavorite, toggleFavorite, isRTL]);
+  }, [navigation, title, product, isFav, toggleFavorite, isRTL]);
 
   if (isLoading) {
     return (
@@ -94,7 +96,7 @@ export default function ProductDetailScreen({ route, navigation }: ProductDetail
           </Text>
           <HeartButton
             product={product}
-            isFav={isFavorite(product.id)}
+            isFav={isFav}
             onToggle={toggleFavorite}
             size={26}
           />

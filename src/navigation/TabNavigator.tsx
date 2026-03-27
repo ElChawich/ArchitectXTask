@@ -63,6 +63,7 @@ function ProductsNavigator() {
       fontWeight: '600' as const,
       flex: 1,
       textAlign: isRTL ? 'right' : 'left',
+      textAlignVertical: 'center',
     } as TextStyle,
   }), [colors, isRTL]);
 
@@ -121,6 +122,7 @@ export default function TabNavigator() {
       fontWeight: '600' as const,
       flex: 1,
       textAlign: isRTL ? 'right' : 'left',
+      textAlignVertical: 'center',
     } as TextStyle,
   }), [colors, isRTL]);
 

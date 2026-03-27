@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
   row: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: spacing.xs,
     gap: spacing.sm,
   },

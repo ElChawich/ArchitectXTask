@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -22,12 +22,13 @@ export default function HeartButton({ product, isFav, onToggle, size = 22 }: Hea
 
   const animatedStyle = useAnimatedStyle(() => ({
     fontSize: size,
+    padding: 6,
     transform: [{ scale: scale.value }],
   }));
 
   const handlePress = () => {
     scale.value = withSequence(
-      withTiming(1.4, { duration: 300 }),
+      withTiming(1.2, { duration: 300 }),
       withTiming(1, { duration: 300 }),
     );
     onToggle(product);
