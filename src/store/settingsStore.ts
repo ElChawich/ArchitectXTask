@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { createMMKV } from 'react-native-mmkv';
+import { Language } from '../constants/layout';
 
 const storage = createMMKV({ id: 'settings-storage' });
 
@@ -18,16 +19,16 @@ const mmkvStorage = {
 };
 
 interface SettingsState {
-  language: 'en' | 'ar';
+  language: Language;
   isDarkMode: boolean;
-  setLanguage: (language: 'en' | 'ar') => void;
+  setLanguage: (language: Language) => void;
   toggleDarkMode: () => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      language: 'en',
+      language: Language.EN,
       isDarkMode: false,
       setLanguage: (language) => set({ language }),
       toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),

@@ -21,7 +21,7 @@ import useDebounce from '../../../hooks/useDebounce';
 import useFavorites from '../../../hooks/useFavorites';
 import useDarkMode from '../../../hooks/useDarkMode';
 import useLanguage from '../../../hooks/useLanguage';
-import { Direction } from '../../../constants/layout';
+import { Direction, Language } from '../../../constants/layout';
 import { fetchCategories } from '../../../api/products';
 import { spacing, borderRadius, fontSize } from '../../../theme/spacing';
 import type { ProductListScreenProps } from '../../../navigation/types';
@@ -152,7 +152,7 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
           accessibilityHint={t('accessibility.languageToggleHint')}
         >
           <Text style={dynamicStyles.langButtonText}>
-            {language === 'en' ? 'AR' : 'EN'}
+            {language === Language.EN ? 'AR' : 'EN'}
           </Text>
         </Pressable>
       </View>
