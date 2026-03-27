@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useMemo } from 'react';
 import {
   View,
   Text,
+  Pressable,
   ScrollView,
   StyleSheet,
   ViewStyle,
@@ -43,24 +44,37 @@ export default function ProductDetailScreen({ route, navigation }: ProductDetail
     reviewerName: { ...styles.reviewerName, color: colors.text, textAlign: isRTL ? 'right' : 'left' } as TextStyle,
     reviewComment: { ...styles.reviewComment, color: colors.textSecondary, textAlign: isRTL ? 'right' : 'left' } as TextStyle,
     star: { color: colors.star } as TextStyle,
+    backChevron: { ...styles.backChevron, color: colors.text } as TextStyle,
   }), [colors, isRTL]);
 
   const textAlign = isRTL ? 'right' as const : 'left' as const;
 
   useLayoutEffect(() => {
+    const heartButton = product ? (
+      <HeartButton product={product} isFav={isFav} onToggle={toggleFavorite} size={22} />
+    ) : null;
+
+    const backButton = (
+      <Pressable
+        onPress={() => navigation.goBack()}
+        accessibilityRole="button"
+        accessibilityLabel={t('back')}
+        hitSlop={8}
+        style={styles.backButton}
+      >
+        <Text style={dynamicStyles.backChevron}>
+          {isRTL ? '›' : '‹'}
+        </Text>
+      </Pressable>
+    );
+
     navigation.setOptions({
       title,
-      headerRight: () =>
-        product ? (
-          <HeartButton
-            product={product}
-            isFav={isFav}
-            onToggle={toggleFavorite}
-            size={22}
-          />
-        ) : null,
+      headerBackVisible: false,
+      headerLeft: isRTL ? () => heartButton : () => backButton,
+      headerRight: isRTL ? () => backButton : () => heartButton,
     });
-  }, [navigation, title, product, isFav, toggleFavorite, isRTL]);
+  }, [navigation, title, product, isFav, toggleFavorite, isRTL, dynamicStyles, t]);
 
   if (isLoading) {
     return (
@@ -293,6 +307,16 @@ const metaStyles = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
+  backButton: {
+    width: 30,
+    marginBottom: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backChevron: {
+    fontSize: 35,
+    fontWeight: '400',
+  },
   loadingContainer: {
     flex: 1,
     padding: spacing.md,

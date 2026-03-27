@@ -80,7 +80,7 @@ function ProductsNavigator() {
             {children}
           </Text>
         ),
-        animation: 'slide_from_right',
+        animation: isRTL ? 'slide_from_left' : 'slide_from_right',
         headerBackButtonDisplayMode: 'minimal',
       }}
     >
@@ -205,22 +205,42 @@ export default function TabNavigator() {
               {children}
             </Text>
           ),
-          headerRight: () => (
-            <View style={styles.darkModeRow} accessibilityRole="none">
-              <Text style={dynamicStyles.darkModeIcon}>
-                {isDarkMode ? '🌙' : '☀️'}
-              </Text>
-              <Switch
-                value={isDarkMode}
-                onValueChange={toggleDarkMode}
-                thumbColor={isDarkMode ? colors.primary : '#FFF'}
-                trackColor={{ false: colors.border, true: colors.primaryLight }}
-                accessibilityRole="switch"
-                accessibilityLabel={t('darkMode')}
-                accessibilityState={{ checked: isDarkMode }}
-              />
-            </View>
-          ),
+          headerLeft: isRTL
+            ? () => (
+                <View style={styles.darkModeRow} accessibilityRole="none">
+                  <Text style={dynamicStyles.darkModeIcon}>
+                    {isDarkMode ? '🌙' : '☀️'}
+                  </Text>
+                  <Switch
+                    value={isDarkMode}
+                    onValueChange={toggleDarkMode}
+                    thumbColor={isDarkMode ? colors.primary : '#FFF'}
+                    trackColor={{ false: colors.border, true: colors.primaryLight }}
+                    accessibilityRole="switch"
+                    accessibilityLabel={t('darkMode')}
+                    accessibilityState={{ checked: isDarkMode }}
+                  />
+                </View>
+              )
+            : undefined,
+          headerRight: isRTL
+            ? undefined
+            : () => (
+                <View style={styles.darkModeRow} accessibilityRole="none">
+                  <Text style={dynamicStyles.darkModeIcon}>
+                    {isDarkMode ? '🌙' : '☀️'}
+                  </Text>
+                  <Switch
+                    value={isDarkMode}
+                    onValueChange={toggleDarkMode}
+                    thumbColor={isDarkMode ? colors.primary : '#FFF'}
+                    trackColor={{ false: colors.border, true: colors.primaryLight }}
+                    accessibilityRole="switch"
+                    accessibilityLabel={t('darkMode')}
+                    accessibilityState={{ checked: isDarkMode }}
+                  />
+                </View>
+              ),
         }}
       />
     </Tab.Navigator>
