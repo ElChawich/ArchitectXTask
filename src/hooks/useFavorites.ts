@@ -1,7 +1,12 @@
 import { useCallback } from 'react';
+import { Platform } from 'react-native';
 import ReactNativeHapticFeedback, { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import { useFavoritesStore } from '../store/favoritesStore';
 import type { Product } from '../api/types';
+
+const hapticType = Platform.OS === 'android'
+  ? HapticFeedbackTypes.effectClick
+  : HapticFeedbackTypes.impactLight;
 
 const hapticOptions = {
   enableVibrateFallback: true,
@@ -22,7 +27,7 @@ function useFavorites(): UseFavoritesReturn {
   const toggleFavorite = useCallback(
     (product: Product) => {
       try {
-        ReactNativeHapticFeedback.trigger(HapticFeedbackTypes.impactLight, hapticOptions);
+        ReactNativeHapticFeedback.trigger(hapticType, hapticOptions);
       } catch {
         // Haptic feedback not available on this device/platform
       }
