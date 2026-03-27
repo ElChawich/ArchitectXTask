@@ -11,4 +11,16 @@ module.exports = {
     'react-native-reanimated': '<rootDir>/__mocks__/react-native-reanimated.ts',
   },
   testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
+  coverageThreshold: {
+    global: {
+      branches: 60,
+      functions: 70,
+      lines: 70,
+      statements: 70,
+    },
+  },
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+  ],
 };

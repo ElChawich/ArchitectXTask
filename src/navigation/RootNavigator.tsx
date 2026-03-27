@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import type { LinkingOptions } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TabNavigator from './TabNavigator';
+import ErrorBoundary from '../components/ErrorBoundary';
 import useDarkMode from '../hooks/useDarkMode';
 import useLanguage from '../hooks/useLanguage';
 import { Direction } from '../constants/layout';
@@ -54,6 +55,7 @@ export default function RootNavigator() {
   };
 
   return (
+    <ErrorBoundary>
     <SafeAreaProvider>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
@@ -68,5 +70,6 @@ export default function RootNavigator() {
         <TabNavigator key={isRTL ? Direction.RTL : Direction.LTR} />
       </NavigationContainer>
     </SafeAreaProvider>
+    </ErrorBoundary>
   );
 }

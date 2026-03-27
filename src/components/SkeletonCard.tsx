@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -34,7 +34,7 @@ function SkeletonBlock({ width, height, style, opacity }: SkeletonBlockProps) {
   );
 }
 
-export default function SkeletonCard() {
+function SkeletonCard() {
   const opacity = useSharedValue(1);
   const { colors } = useDarkMode();
 
@@ -67,6 +67,8 @@ export default function SkeletonCard() {
     </View>
   );
 }
+
+export default memo(SkeletonCard);
 
 const styles = StyleSheet.create({
   card: {

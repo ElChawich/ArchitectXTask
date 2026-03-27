@@ -114,18 +114,11 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
     } as TextStyle,
     categoryScrollView: { direction: isRTL ? Direction.RTL : Direction.LTR } as ViewStyle,
     emptyText: { ...styles.emptyText, color: colors.textSecondary, textAlign: isRTL ? 'right' : 'left' } as TextStyle,
+    chipSelected: { ...styles.categoryChip, backgroundColor: colors.primary, borderColor: colors.primary } as ViewStyle,
+    chipUnselected: { ...styles.categoryChip, backgroundColor: colors.card, borderColor: colors.border } as ViewStyle,
+    chipTextSelected: { ...styles.categoryChipText, color: '#FFF' } as TextStyle,
+    chipTextUnselected: { ...styles.categoryChipText, color: colors.text } as TextStyle,
   }), [colors, isRTL]);
-
-  // Per-chip styles depend on selectedCategory — computed per item, not memoizable
-  const chipStyle = (selected: boolean): ViewStyle => ({
-    ...styles.categoryChip,
-    backgroundColor: selected ? colors.primary : colors.card,
-    borderColor: selected ? colors.primary : colors.border,
-  });
-  const chipTextStyle = (selected: boolean): TextStyle => ({
-    ...styles.categoryChipText,
-    color: selected ? '#FFF' : colors.text,
-  });
 
   return (
     <Animated.View
@@ -172,27 +165,27 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
             accessibilityLabel={`${t('category.label')} filter`}
           >
             <Pressable
-              style={chipStyle(selectedCategory === '')}
+              style={selectedCategory === '' ? dynamicStyles.chipSelected : dynamicStyles.chipUnselected}
               onPress={() => handleCategorySelect('')}
               accessibilityRole="button"
               accessibilityState={{ selected: selectedCategory === '' }}
               accessibilityLabel={t('category.all')}
             >
-              <Text style={chipTextStyle(selectedCategory === '')}>
+              <Text style={selectedCategory === '' ? dynamicStyles.chipTextSelected : dynamicStyles.chipTextUnselected}>
                 {t('category.all')}
               </Text>
             </Pressable>
             {categories.map((cat) => (
               <Pressable
                 key={cat.slug}
-                style={chipStyle(selectedCategory === cat.slug)}
+                style={selectedCategory === cat.slug ? dynamicStyles.chipSelected : dynamicStyles.chipUnselected}
                 onPress={() => handleCategorySelect(cat.slug)}
                 accessibilityRole="button"
                 accessibilityState={{ selected: selectedCategory === cat.slug }}
                 accessibilityLabel={cat.name}
               >
                 <Text
-                  style={chipTextStyle(selectedCategory === cat.slug)}
+                  style={selectedCategory === cat.slug ? dynamicStyles.chipTextSelected : dynamicStyles.chipTextUnselected}
                   numberOfLines={1}
                 >
                   {cat.name}
@@ -228,7 +221,7 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
           ListFooterComponent={renderFooter}
           ListEmptyComponent={
             <Text style={dynamicStyles.emptyText}>
-              No products found.
+              {t('products.empty')}
             </Text>
           }
           showsVerticalScrollIndicator={false}

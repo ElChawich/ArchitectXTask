@@ -1,22 +1,9 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { createMMKV } from 'react-native-mmkv';
 import { Language } from '../constants/layout';
+import { createMmkvStorage } from './mmkvStorage';
 
-const storage = createMMKV({ id: 'settings-storage' });
-
-const mmkvStorage = {
-  getItem: (key: string): string | null => {
-    const value = storage.getString(key);
-    return value ?? null;
-  },
-  setItem: (key: string, value: string): void => {
-    storage.set(key, value);
-  },
-  removeItem: (key: string): void => {
-    storage.remove(key);
-  },
-};
+const mmkvStorage = createMmkvStorage('settings-storage');
 
 interface SettingsState {
   language: Language;

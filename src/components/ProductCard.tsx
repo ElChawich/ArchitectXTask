@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -19,7 +19,7 @@ interface ProductCardProps {
   onToggleFavorite: (product: Product) => void;
 }
 
-export default function ProductCard({
+function ProductCard({
   product,
   onPress,
   isFavorite,
@@ -108,6 +108,8 @@ export default function ProductCard({
     </Animated.View>
   );
 }
+
+export default memo(ProductCard);
 
 const styles = StyleSheet.create({
   card: {

@@ -31,6 +31,9 @@ const ar = {
     warranty: 'الضمان',
     shipping: 'الشحن',
   },
+  products: {
+    empty: 'لم يتم العثور على منتجات.',
+  },
   favorites: {
     empty: 'لا توجد مفضلات بعد',
     emptySubtitle: 'اضغط على أيقونة القلب على أي منتج لحفظه هنا.',

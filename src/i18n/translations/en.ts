@@ -31,6 +31,9 @@ const en = {
     warranty: 'Warranty',
     shipping: 'Shipping',
   },
+  products: {
+    empty: 'No products found.',
+  },
   favorites: {
     empty: 'No favorites yet',
     emptySubtitle: 'Tap the heart icon on any product to save it here.',

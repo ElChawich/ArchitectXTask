@@ -1,22 +1,9 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { createMMKV } from 'react-native-mmkv';
 import type { Product } from '../api/types';
+import { createMmkvStorage } from './mmkvStorage';
 
-const storage = createMMKV({ id: 'favorites-storage' });
-
-const mmkvStorage = {
-  getItem: (key: string): string | null => {
-    const value = storage.getString(key);
-    return value ?? null;
-  },
-  setItem: (key: string, value: string): void => {
-    storage.set(key, value);
-  },
-  removeItem: (key: string): void => {
-    storage.remove(key);
-  },
-};
+const mmkvStorage = createMmkvStorage('favorites-storage');
 
 interface FavoritesState {
   favorites: Product[];
