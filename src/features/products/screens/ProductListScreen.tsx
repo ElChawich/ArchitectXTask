@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useLayoutEffect, useMemo } from 'react';
+import React, { useState, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import {
   View,
   FlatList,
@@ -33,6 +33,7 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
+  const listRef = useRef<FlatList<Product>>(null);
   const debouncedSearch = useDebounce(searchText, 300);
   const { colors } = useDarkMode();
   const { t, isRTL, toggleLanguage, language } = useLanguage();
@@ -59,9 +60,11 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
   );
 
   const handleCategorySelect = useCallback((slug: string) => {
-    setSelectedCategory((prev) => (prev === slug ? '' : slug));
+    if (selectedCategory === slug) return;
+    setSelectedCategory(slug);
     setSearchText('');
-  }, []);
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+  }, [selectedCategory]);
 
   const renderProduct = useCallback(
     ({ item }: { item: Product }) => (
@@ -215,6 +218,7 @@ export default function ProductListScreen({ navigation }: ProductListScreenProps
         <ErrorState onRetry={refetch} />
       ) : (
         <FlatList
+          ref={listRef}
           data={products}
           keyExtractor={(item) => String(item.id)}
           renderItem={renderProduct}
@@ -273,7 +277,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
   },
   categorySection: {
-    paddingHorizontal: spacing.md,
     marginBottom: spacing.sm,
   },
   categoryLabel: {
@@ -282,10 +285,12 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: spacing.xs,
+    paddingHorizontal: spacing.md,
   },
   categoryScroll: {
     gap: spacing.xs,
     paddingBottom: spacing.xs,
+    paddingHorizontal: spacing.md,
   },
   categoryChip: {
     paddingHorizontal: spacing.md,
