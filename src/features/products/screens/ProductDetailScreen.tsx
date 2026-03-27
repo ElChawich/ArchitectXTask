@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -49,32 +49,30 @@ export default function ProductDetailScreen({ route, navigation }: ProductDetail
 
   const textAlign = isRTL ? 'right' as const : 'left' as const;
 
+  const renderBackButton = useCallback(() => (
+    <Pressable
+      onPress={() => navigation.goBack()}
+      accessibilityRole="button"
+      accessibilityLabel={t('back')}
+      hitSlop={8}
+      style={styles.backButton}
+    >
+      <Text style={dynamicStyles.backChevron}>{isRTL ? '›' : '‹'}</Text>
+    </Pressable>
+  ), [navigation, t, dynamicStyles.backChevron, isRTL]);
+
+  const renderHeartButton = useCallback(() => product ? (
+    <HeartButton product={product} isFav={isFav} onToggle={toggleFavorite} size={22} />
+  ) : null, [product, isFav, toggleFavorite]);
+
   useLayoutEffect(() => {
-    const heartButton = product ? (
-      <HeartButton product={product} isFav={isFav} onToggle={toggleFavorite} size={22} />
-    ) : null;
-
-    const backButton = (
-      <Pressable
-        onPress={() => navigation.goBack()}
-        accessibilityRole="button"
-        accessibilityLabel={t('back')}
-        hitSlop={8}
-        style={styles.backButton}
-      >
-        <Text style={dynamicStyles.backChevron}>
-          {isRTL ? '›' : '‹'}
-        </Text>
-      </Pressable>
-    );
-
     navigation.setOptions({
       title,
       headerBackVisible: false,
-      headerLeft: isRTL ? () => heartButton : () => backButton,
-      headerRight: isRTL ? () => backButton : () => heartButton,
+      headerLeft: isRTL ? renderHeartButton : renderBackButton,
+      headerRight: isRTL ? renderBackButton : renderHeartButton,
     });
-  }, [navigation, title, product, isFav, toggleFavorite, isRTL, dynamicStyles, t]);
+  }, [navigation, title, isRTL, renderHeartButton, renderBackButton]);
 
   if (isLoading) {
     return (
