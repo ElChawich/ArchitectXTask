@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
   titleRow: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: spacing.sm,
     gap: spacing.sm,
   },

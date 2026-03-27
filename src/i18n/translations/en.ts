@@ -48,6 +48,7 @@ const en = {
     imageGallery: 'Image gallery for {{title}}',
     imageGalleryHint: '{{count}} images, swipe left or right to navigate',
     imageItem: '{{title}}, image {{index}} of {{total}}',
+    imageCounter: '{{current}} / {{total}}',
     availability: 'Availability: {{status}}',
   },
 };

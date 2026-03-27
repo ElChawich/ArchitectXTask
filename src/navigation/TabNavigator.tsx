@@ -112,7 +112,6 @@ export default function TabNavigator() {
     } as ViewStyle,
     tabBarLabel: {
       fontFamily: isRTL ? 'System' : undefined,
-      writingDirection: isRTL ? Direction.RTL : Direction.LTR,
     } as TextStyle,
     darkModeIcon: { color: colors.textSecondary, fontSize: 12, marginRight: 4 } as TextStyle,
     favHeader: { backgroundColor: colors.card } as ViewStyle,

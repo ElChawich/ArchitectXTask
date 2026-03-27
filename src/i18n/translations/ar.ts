@@ -48,6 +48,7 @@ const ar = {
     imageGallery: 'معرض صور {{title}}',
     imageGalleryHint: '{{count}} صور، اسحب يساراً أو يميناً للتنقل',
     imageItem: '{{title}}، صورة {{index}} من {{total}}',
+    imageCounter: '{{total}} / {{current}}',
     availability: 'التوفر: {{status}}',
   },
 };
