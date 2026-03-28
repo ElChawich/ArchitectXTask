@@ -163,6 +163,7 @@ No `Animated` API from React Native core is used anywhere.
 ## What I Would Improve Given More Time
 
 1. Custom RTL-aware `headerLeft` with a Reanimated-mirrored back chevron.
+2. Replace the built-in `Image` component with `react-native-fast-image` for better disk/memory caching, priority queuing, and progressive loading on product images.
 3. E2E tests with Detox covering the product → detail → favourite → favourites tab flow.
 4. Shared element transition from product card thumbnail to detail image gallery.
 5. Virtualised/windowed list for infinite scroll to cap memory usage.
