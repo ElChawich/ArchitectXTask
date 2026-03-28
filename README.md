@@ -49,16 +49,19 @@ npm test
 ```
 src/
 ├── api/              # All API calls and response types — no fetch() in components
-│   ├── client.ts     # Base fetch wrapper with error handling
+│   ├── client.ts     # Base fetch wrapper with APIError class
 │   ├── products.ts   # Product/category endpoint functions
 │   └── types.ts      # Full Product, Category, Response interfaces (strict, no any)
 ├── components/       # Shared, reusable UI components
 │   ├── ProductCard.tsx     # Card with spring press animation + heart toggle
 │   ├── SkeletonCard.tsx    # Pulse shimmer skeleton (Reanimated)
 │   ├── HeartButton.tsx     # Bounce/pop animation on favourite toggle
-│   ├── ImageGallery.tsx    # Paged horizontal scroll with dot indicators
+│   ├── ImageGallery.tsx    # Paged horizontal scroll with dot indicators + RTL mirror
 │   ├── ErrorState.tsx      # Error UI with retry button
-│   └── EmptyState.tsx      # Empty favourites state
+│   ├── EmptyState.tsx      # Empty favourites state
+│   └── ErrorBoundary.tsx   # Class component error boundary with recovery UI
+├── constants/
+│   └── layout.ts           # Direction + Language enums
 ├── features/
 │   ├── products/
 │   │   ├── screens/        # ProductListScreen, ProductDetailScreen
@@ -76,7 +79,8 @@ src/
 │   └── types.ts            # Typed navigation params (RN TypeScript guide)
 ├── store/
 │   ├── favoritesStore.ts   # Zustand + MMKV — persisted favourites list
-│   └── settingsStore.ts    # Zustand + MMKV — language + dark mode
+│   ├── settingsStore.ts    # Zustand + MMKV — language + dark mode
+│   └── mmkvStorage.ts      # Shared MMKV storage adapter factory
 ├── i18n/
 │   ├── index.ts            # i18next initialisation
 │   └── translations/
@@ -133,10 +137,10 @@ Prices, ratings, and stock counts are wrapped in explicit `flexDirection: 'row'`
 |---|---|
 | Card press scale 0.96 | `useSharedValue` + `withSpring` on `pressIn/pressOut` |
 | Skeleton shimmer/pulse | `withRepeat(withSequence(withTiming))` opacity loop |
-| Heart bounce/pop | `withSequence(withSpring(1.5), withSpring(1))` |
+| Heart bounce/pop | `withSequence(withSpring(1.2), withSpring(1))` |
 | Language layout transition | `LinearTransition.springify()` on `Animated.View` |
 | Tab icon scale on active | `withSpring(1.2)` driven by `focused` prop |
-| Screen transition | `animation: 'slide_from_right'` in NativeStack options |
+| Screen transition | `isRTL ? 'slide_from_left' : 'slide_from_right'` in NativeStack options |
 
 No `Animated` API from React Native core is used anywhere.
 
@@ -147,7 +151,7 @@ No `Animated` API from React Native core is used anywhere.
 - [x] **Zustand** state management (replaces useState)
 - [x] **TanStack Query v5** for data fetching (replaces useEffect)
 - [x] **Dark mode** toggle persisted to MMKV
-- [x] **Unit tests** — `useDebounce` (5 cases) + `useFavorites` (5 cases) via Jest + React Native Testing Library
+- [x] **Unit tests** — `useDebounce` (5 cases) + `useFavorites` (6 cases) via Jest + React Native Testing Library
 - [x] **Accessibility** — `accessibilityRole`, `accessibilityLabel`, `accessibilityState`, `accessibilityHint` on all interactive elements
 - [x] **Haptic feedback** on favourite toggle (`react-native-haptic-feedback`, vibration fallback enabled)
 
@@ -155,14 +159,14 @@ No `Animated` API from React Native core is used anywhere.
 
 ## Trade-offs
 
-1. **RTL back arrow**: The native NativeStack back chevron doesn't auto-flip without `I18nManager`. Mitigated by showing `headerBackTitle` in Arabic mode. A custom `headerLeft` with a flipped SVG arrow was deferred for time.
+1. **RTL header**: The native NativeStack header doesn't auto-flip without `I18nManager.forceRTL`. Solved by hiding the native back button (`headerBackVisible: false`) and rendering a custom chevron (`‹`/`›`) that swaps between `headerLeft` and `headerRight` based on `isRTL`. The dark mode toggle in the Favourites header also swaps sides. Slide animation direction is `isRTL ? 'slide_from_left' : 'slide_from_right'`.
 2. **Search + category simultaneously**: DummyJSON doesn't support combined filters. Search takes priority when both are active; the UI clears search when a category is tapped.
 
 ---
 
 ## What I Would Improve Given More Time
 
-1. Custom RTL-aware `headerLeft` with a Reanimated-mirrored back chevron.
+1. Replace the unicode chevron (`‹`/`›`) back button with an SVG icon that matches the native back button pixel-perfectly.
 2. Replace the built-in `Image` component with `react-native-fast-image` for better disk/memory caching, priority queuing, and progressive loading on product images.
 3. E2E tests with Detox covering the product → detail → favourite → favourites tab flow.
 4. Shared element transition from product card thumbnail to detail image gallery.
